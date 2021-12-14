@@ -1,2 +1,2 @@
 # console-engine
-An Engine created mainly by manipulating ASCII stuffs.
+This is just a project to help me understand different c++ and programming concepts.
