@@ -1,7 +1,0 @@
-#ifndef CONSOLEENGINE_H
-#define CONSOLEENGINE_H
-
-
-
-
-#endif // CONSOLEENGINE_H
