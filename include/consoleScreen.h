@@ -35,20 +35,47 @@ namespace CE{
         }
         bool isOutOfRange(int x, int y = 0){
             if(x > _screenWidth){
+                std::cout << "Out of Bounce" << std::endl;
+                return true;
+            }else if(x < 0){
+                std::cout << "Out of Bounce" << std::endl;
                 return true;
             }
             if(y > _screenHeight){
+                std::cout << "Out of Bounce" << std::endl;
+                return true;
+            }else if(y < 0){
+                std::cout << "Out of Bounce" << std::endl;
                 return true;
             }
             return false;
         }
-        void fillHorizontal(char chr, sSize amount, const std::initializer_list<sSize> &pos){
-            sSize x2 = *(pos.begin()+1),
+        bool isOutOfRange(const std::initializer_list<sSize> &pos){
+            if(*(pos.begin()) > *(pos.begin()+1)){ // if x1 > x2
+                std::cout << "Out of Bounce" << std::endl;
+                return true;
+            }
+            if(isOutOfRange(*(pos.begin()+1))){ // if x2 is out of bounce
+                return true;
+            }
+            return false;
+        }
+        void fillHorizontal(char chr, const std::initializer_list<sSize> &pos){
+            sSize x1 = *(pos.begin()),
+                  x2 = *(pos.begin()+1),
                   y = *(pos.begin()+2);
-            sSize x1 = *(pos.begin());
             for(int i = x1; i < x2; ++i){
                 _screen[(y*(_screenWidth+1))+i] = chr;
             }
+        }
+        void fillVertical(char chr, const std::initializer_list<sSize> &pos){
+            sSize y1 = *(pos.begin()),
+                  y2 = *(pos.begin()+1),
+                  x = *(pos.begin()+2);
+            for(int i = y1; i < y2; ++i){
+                _screen[(i*(_screenWidth+1))+x] = chr;
+            }
+                  
         }
     private: // variables
         std::string _screen;
