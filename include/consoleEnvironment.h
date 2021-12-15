@@ -7,29 +7,40 @@ namespace CE{
     private:
         typedef std::string::size_type sSize;
     public:
-        ConsoleEnvironment(ConsoleScreen *screen){
+        ConsoleEnvironment(ConsoleScreen *screen, char chr, std::string type){
             _screen = screen;
-            
+            _chr = chr;
+            _type = type;
+            _positions.reserve(_screen->getScreenTotal()+_screen->getScreenHeight()+10);
         }
         void create(std::string type, sSize posX = 0, sSize posY = 0){
             // in-progress
         }
-        void fillHorizontal(char chr, const std::initializer_list<sSize> &pos){
-            if(_screen->isOutOfRange(pos)){
-                exit(-1);
+        void fillHorizontal(sSize x1, sSize x2, sSize y){
+            if(x1 >= x2){
+                _screen->callError("range");
             }
-            _screen->fillHorizontal(chr, pos);
+            _screen->checkRange(x1,y);
+            _screen->checkRange(x2,y);
+            _screen->fillHorizontal(_chr, x1, x2, y);
         }
-        void fillVertical(char chr, const std::initializer_list<sSize> &pos){
-            if(_screen->isOutOfRange(pos)){
-                exit(-1);
+        void fillVertical(sSize x, sSize y1, sSize y2){
+            if(y1 >= y2){
+                _screen->callError("range");
             }
-            _screen->fillVertical(chr, pos);
+            _screen->checkRange(x,y1);
+            _screen->checkRange(x,y2);
+            _screen->fillVertical(_chr, x, y1, y2);
+        }
+        void updatePosition(){
+
         }
     private: // checker
     private:
-        sSize _posX, _posY;
+        std::vector<std::vector<sSize>> _positions; // _position[y][x]
+        std::map<sSize, std::pair<sSize,char>> stuff;
         std::string _type;
+        char _chr;
         ConsoleScreen *_screen;
     };
 
