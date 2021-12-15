@@ -3,6 +3,14 @@
 
 #include "consoleScreen.h"
 namespace CE{
+    class ConsoleEntity{
+    private:
+        typedef long long lSize;
+    public:
+        ConsoleEntity(){
+            
+        }
+    };
 
 };
 
