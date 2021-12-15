@@ -23,6 +23,6 @@ void testVertical(){
 
 int main(){
     testVertical();
-
+    Tree.positionPrint();
     mainScreen.debugPrint();
 }

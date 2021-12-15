@@ -6,13 +6,13 @@ namespace CE{
     class ConsoleEnvironment;
     class ConsoleScreen{
     private:
-        typedef std::string::size_type sSize;
+        typedef long long lSize;
         friend class ConsoleEnvironment;
 
     public: // constructors
-        ConsoleScreen(const sSize &width, const sSize &height, char chr = ' ') : _screenWidth(width), _screenHeight(height){ // working
+        ConsoleScreen(const lSize &width, const lSize &height, char chr = ' ') : _screenWidth(width), _screenHeight(height){ // working
             for(int i = 0; i < height; ++i){
-                _screen[i] = std::make_pair(std::vector<long>(width), std::string(6, chr));
+                _screen[i] = std::make_pair(std::vector<long long>(width), std::string(6, chr));
                 for(int j = 0; j < width; ++j){
                     _screen[i].first[j] = j;
                 }
@@ -53,34 +53,34 @@ namespace CE{
                 exit(-1);
             }
         }
-        void fillHorizontal(const char &chr, sSize x1, sSize x2, sSize y){ // assume that the position is existing
+        void fillHorizontal(const char &chr, lSize x1, lSize x2, lSize y){ // assume that the position is existing
             for(int i = x1; i < x2; ++i){
                 _screen[y].second[i] = chr;
             }
         }
-        void fillVertical(const char &chr, sSize x, sSize y1, sSize y2){
+        void fillVertical(const char &chr, lSize x, lSize y1, lSize y2){
             for(int i = y1; i < y2; ++i){
                 _screen[i].second[x] = chr;
             }
         }
 
     private: // getter
-        sSize getScreenWidth(){
+        lSize getScreenWidth(){
             return _screenWidth;
         }
-        sSize getScreenHeight(){
+        lSize getScreenHeight(){
             return _screenHeight;
         }
-        sSize getScreenTotal(){
+        lSize getScreenTotal(){
             return _screenWidth*_screenHeight;
         }
-        std::map<long, std::pair<std::vector<long>, std::string>> *getScreen(){
+        std::map<long long, std::pair<std::vector<long long>, std::string>> *getScreen(){
             return &_screen;
         }
     private: // variables
-        std::map<long, std::pair<std::vector<long>, std::string>> _screen;
-        const sSize _screenWidth;
-        const sSize _screenHeight;
+        std::map<long long, std::pair<std::vector<long long>, std::string>> _screen;
+        const lSize _screenWidth;
+        const lSize _screenHeight;
     
     protected:
     };
