@@ -1,28 +1,24 @@
 #include "../include/consoleScreen.h"
-#include "../include/consoleEnvironment.h"
+#include "../include/consoleEnvironmentHandler.h"
+
 
 CE::ConsoleScreen mainScreen(5,5, '#');
-CE::ConsoleEnvironment Tree(&mainScreen,'o',"water");
+CE::ConsoleEnvironment Tree('T',0,0);
+CE::ConsoleEnvironmentHandler _envHandle;
 
-
-void testHorizontal(){
-    Tree.fillHorizontal(0,5,0); // x1, x2, y
-    Tree.fillHorizontal(1,5,1); // x1, x2, y
-    Tree.fillHorizontal(2,5,2); // x1, x2, y
-    Tree.fillHorizontal(3,5,3); // x1, x2, y
-    Tree.fillHorizontal(4,5,4); // x1, x2, y
-}
-
-void testVertical(){
-    Tree.fillVertical(0,0,5); // x, y1, y2 
-    Tree.fillVertical(1,1,5); // x, y1, y2 
-    Tree.fillVertical(2,2,5); // x, y1, y2 
-    Tree.fillVertical(3,3,5); // x, y1, y2 
-    Tree.fillVertical(4,4,5); // x, y1, y2 
-}
 
 int main(){
-    testVertical();
-    Tree.positionPrint();
-    mainScreen.debugPrint();
+    std::chrono::milliseconds timespan(1500); 
+    std::cout << std::endl;
+    _envHandle.add(&Tree);
+    mainScreen.update(_envHandle);
+
+    for(int i = 0; i < 5; ++i){
+        for(int j = 0; j < 5; ++j){
+            Tree.setPosition(i,j);
+        mainScreen.update(_envHandle);
+            mainScreen.debugPrint();
+            std::this_thread::sleep_for(timespan);
+        }
+    }
 }

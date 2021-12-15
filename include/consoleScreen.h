@@ -1,47 +1,46 @@
 #ifndef CONSOLESCREEN_H
 #define CONSOLESCREEN_H
 
-#include "includes.h"
+#include "consoleEnvironmentHandler.h"
 namespace CE{
-    class ConsoleEnvironment;
     class ConsoleScreen{
     private:
         typedef long long lSize;
-        friend class ConsoleEnvironment;
 
     public: // constructors
         ConsoleScreen(const lSize &width, const lSize &height, char chr = ' ') : _screenWidth(width), _screenHeight(height){ // working
             for(int i = 0; i < height; ++i){
-                _screen[i] = std::make_pair(std::vector<long long>(width), std::string(6, chr));
+                _screen[i] = std::make_pair(std::vector<long long>(width), std::string(width, chr));
                 for(int j = 0; j < width; ++j){
                     _screen[i].first[j] = j;
                 }
-                _screen[i].second[5] = '\n';
+            }
+            _chr = chr;
+        }
+        void show(){
+        }
+        void add(){
+
+        }
+        void update(ConsoleEnvironmentHandler envHandle){
+            if(!(envHandle.isEmpty())){
+                updateEnv(envHandle);
             }
         }
         void debugPrint(){
-            update();
-            std::cout << std::endl;
+            system("cls"); // TEST
             for(auto i: _screen){
-                for(auto j: (i.second.first)){
-                    std::cout << j << ' ';
-                }
-                std::cout << std::endl;
+                std::cout << i.second.second << '\n';
             }
         }
     private: // functions
-        void update(){
-            for(auto i: _screen){
-                std::cout << i.second.second;
-            }
-        }
         void checkRange(int x, int y = 0){
-            if(x > _screenWidth){
+            if(x >= _screenWidth){
                 callError("range");
             }else if(x < 0){
                 callError("range");
             }
-            if(y > _screenHeight){
+            if(y >= _screenHeight){
                 callError("range");
             }else if(y < 0){
                 callError("range");
@@ -53,17 +52,28 @@ namespace CE{
                 exit(-1);
             }
         }
-        void fillHorizontal(const char &chr, lSize x1, lSize x2, lSize y){ // assume that the position is existing
-            for(int i = x1; i < x2; ++i){
-                _screen[y].second[i] = chr;
-            }
-        }
-        void fillVertical(const char &chr, lSize x, lSize y1, lSize y2){
-            for(int i = y1; i < y2; ++i){
-                _screen[i].second[x] = chr;
-            }
-        }
 
+    private: // UPDATE
+        void updateEnv(ConsoleEnvironmentHandler envHandle){
+            auto temp = envHandle.getEnvironment();
+            for(int i = 0; i < temp->size(); ++i){
+                auto x = temp->operator[](i)->getPositionX(),
+                     y = temp->operator[](i)->getPositionY(),
+                     px = temp->operator[](i)->getPrevPositionX(),
+                     py = temp->operator[](i)->getPrevPositionY();
+                char chr = temp->operator[](i)->getChar();
+                updatePosition(x,y,px,py,chr);
+                temp->operator[](i)->updatePrevPos();
+            }
+            
+        }
+        void updatePosition(lSize x, lSize y, lSize px, lSize py, char chr){
+            checkRange(x,y); // no ned to check for px and py, since we're sure they are always correct
+            _screen[y].second[x] = chr;
+            if(py != y || px != x){
+                _screen[py].second[px] = _chr;
+            }
+        }
     private: // getter
         lSize getScreenWidth(){
             return _screenWidth;
@@ -81,7 +91,7 @@ namespace CE{
         std::map<long long, std::pair<std::vector<long long>, std::string>> _screen;
         const lSize _screenWidth;
         const lSize _screenHeight;
-    
+        char _chr;
     protected:
     };
 

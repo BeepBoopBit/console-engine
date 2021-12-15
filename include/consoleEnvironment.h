@@ -1,63 +1,77 @@
 #ifndef CONSOLEENVIRONMENT_H
 #define CONSOLEENVIRONMENT_H
+#include "includes.h"
 
-#include "consoleScreen.h"
 namespace CE{
     class ConsoleEnvironment{
     private:
         typedef long long lSize;
-    public:
-        ConsoleEnvironment(ConsoleScreen *screen, char chr, std::string type){
-            _screen = screen;
+    public: // --------------------- CREATION --------------------- 
+        enum BodyType {RigidBody, StaticBody};
+        enum AreaBodyType {Box, Circle};
+        ConsoleEnvironment(char chr, lSize posX = 0, lSize posY = 0, BodyType bType = RigidBody, AreaBodyType aType = Box, bool show = true){
+            // others
             _chr = chr;
-            _type = type;
+            visibility(show);
+
+            // type
+            _bType = bType;
+            _aType = aType;
+
+            // position
+            _posX       = posX;
+            _posY       = posY;
+            _prevPosX   = posX;
+            _prevPosY   = posY;
+
         }
-        void create(std::string type, lSize posX = 0, lSize posY = 0){
-            // in-progress
+    
+    public: // --------------------- FUNCTIONALITY --------------------- 
+        void visibility(bool isTrue){
+            _visibility = isTrue;
         }
-        void fillHorizontal(lSize x1, lSize x2, lSize y){
-            if(x1 >= x2){
-                _screen->callError("range");
-            }
-            _screen->checkRange(x1,y);
-            _screen->checkRange(x2,y);
-            _screen->fillHorizontal(_chr, x1, x2, y);
-            updatePosition({x1,x2}, {y});
+        void setPosition(lSize x, lSize y){
+            _posX = x;
+            _posY = y;
         }
-        void fillVertical(lSize x, lSize y1, lSize y2){
-            if(y1 >= y2){
-                _screen->callError("range");
-            }
-            _screen->checkRange(x,y1);
-            _screen->checkRange(x,y2);
-            _screen->fillVertical(_chr, x, y1, y2);
-            updatePosition({x}, {y1,y2});
+        void setChar(char chr){
+            _chr = chr;
         }
-        void positionPrint(){
-            for(auto i: _positions){
-                std::cout <<  i.first << ' ' << i.second << '\n';
-            }
-            std::cout << std::endl;
+    public: // --------------------- GETTER ---------------------
+        lSize getPositionX(){
+            return _posX;
         }
-    private: // checker
-        void updatePosition(const std::initializer_list<lSize> &posX, const std::initializer_list<lSize> &posY){
-            if(posY.size() > 1){
-                for(int i = *(posY.begin()); i < (*(posY.begin()+1)); ++i){
-                    _positions.push_back(std::make_pair(*(posX.begin()), i));
-                }
-            }else{
-                for(int i = *(posX.begin()); i < (*(posX.begin()+1)); ++i){
-                    _positions.push_back(std::make_pair(i, *(posY.begin())));
-                }
-            }
+        lSize getPositionY(){
+            return _posY;
         }
-    private:
-        std::vector<std::pair<int,int>> _positions;
-        // _pos[n].first -> x
-        // _pos[n].second -> y
-        std::string _type;
-        char _chr;
-        ConsoleScreen *_screen;
+        lSize getPrevPositionX(){
+            return _prevPosX;
+        }
+        lSize getPrevPositionY(){
+            return _prevPosY;
+        }
+        char getChar(){
+            return _chr;
+        }
+    void updatePrevPos(){
+        _prevPosX = _posX;
+        _prevPosY = _posY;
+    }    
+    private: // --------------------- CHECKER --------------------- 
+        void updatePrevPosition(lSize x, lSize y){
+            _prevPosX = x;
+            _prevPosY = y;
+        }
+
+    private: // --------------------- VARIABLES --------------------- 
+        lSize           _posX       = 0,
+                        _posY       = 0,
+                        _prevPosX   = 0,
+                        _prevPosY   = 0;
+        BodyType        _bType      = StaticBody;
+        AreaBodyType    _aType      = Box;
+        char            _chr        = ' ';
+        bool            _visibility = true;
     };
 
 };
