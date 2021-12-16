@@ -1,12 +1,13 @@
 #ifndef CONSOLESCREEN_H
 #define CONSOLESCREEN_H
-
-#include "consoleEnvironmentHandler.h"
+#include "includes.h"
 namespace CE{
+    class ConsoleEnvironment;
     class ConsoleScreen{
     private:
         typedef long long lSize;
-
+        friend class ConsoleEnvironment;
+        friend class RigidBody;
     public: // constructors
         ConsoleScreen(const lSize &width, const lSize &height, char chr = ' ') : _screenWidth(width), _screenHeight(height){ // working
             for(int i = 0; i < height; ++i){
@@ -17,15 +18,8 @@ namespace CE{
             }
             _chr = chr;
         }
-        void show(){
-        }
         void add(){
-
-        }
-        void update(ConsoleEnvironmentHandler envHandle){
-            if(!(envHandle.isEmpty())){
-                updateEnv(envHandle);
-            }
+            // add screen in a screen (MAYBE)
         }
         void debugPrint(){
             system("cls"); // TEST
@@ -54,25 +48,15 @@ namespace CE{
         }
 
     private: // UPDATE
-        void updateEnv(ConsoleEnvironmentHandler envHandle){
-            auto temp = envHandle.getEnvironment();
-            for(int i = 0; i < temp->size(); ++i){
-                auto x = temp->operator[](i)->getPositionX(),
-                     y = temp->operator[](i)->getPositionY(),
-                     px = temp->operator[](i)->getPrevPositionX(),
-                     py = temp->operator[](i)->getPrevPositionY();
-                char chr = temp->operator[](i)->getChar();
-                updatePosition(x,y,px,py,chr);
-                temp->operator[](i)->updatePrevPos();
-            }
-            
-        }
-        void updatePosition(lSize x, lSize y, lSize px, lSize py, char chr){
+        void updatePosition(char chr, lSize x, lSize y, lSize px, lSize py){
             checkRange(x,y); // no ned to check for px and py, since we're sure they are always correct
             _screen[y].second[x] = chr;
             if(py != y || px != x){
                 _screen[py].second[px] = _chr;
             }
+        }
+        void updateVisibility(bool isTrue){
+            std::cout << "Successfully notified" << std::endl;
         }
     private: // getter
         lSize getScreenWidth(){
@@ -94,7 +78,7 @@ namespace CE{
         char _chr;
     protected:
     };
-
+    
 };
 
 

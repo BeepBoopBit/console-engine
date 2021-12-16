@@ -1,77 +1,61 @@
 #ifndef CONSOLEENVIRONMENT_H
 #define CONSOLEENVIRONMENT_H
-#include "includes.h"
 
+#include "consoleScreen.h"
 namespace CE{
+
     class ConsoleEnvironment{
+    protected:
+        virtual void visibility(bool isTrue) = 0;
+        virtual void setPosition(long long x, long long y) = 0;
+        //virtual void setChar(char chr) = 0;
+        //virtual long long getPosX() = 0;
+        //virtual long long getPosY() = 0;
+        //virtual long long getPrevPosX() = 0;
+        //virtual long long getPrevPosY() = 0;
+        //virtual char getChar() = 0;
+        bool _visibility = true;
+        long long _x = 0,
+                  _y = 0;
+        long long _prevX = 0,
+                  _prevY = 0;
+        char _chr = '#';
+
+    };
+    class RigidBody : ConsoleEnvironment{
     private:
         typedef long long lSize;
-    public: // --------------------- CREATION --------------------- 
-        enum BodyType {RigidBody, StaticBody};
-        enum AreaBodyType {Box, Circle};
-        ConsoleEnvironment(char chr, lSize posX = 0, lSize posY = 0, BodyType bType = RigidBody, AreaBodyType aType = Box, bool show = true){
-            // others
+    public:
+        RigidBody(ConsoleScreen *screen, char chr = '#', lSize posX = 0, lSize posY = 0){
             _chr = chr;
-            visibility(show);
-
-            // type
-            _bType = bType;
-            _aType = aType;
-
-            // position
-            _posX       = posX;
-            _posY       = posY;
-            _prevPosX   = posX;
-            _prevPosY   = posY;
-
+            _screen = screen;
+            setPosition(posX, posY);
         }
-    
-    public: // --------------------- FUNCTIONALITY --------------------- 
         void visibility(bool isTrue){
-            _visibility = isTrue;
+            notifyVisibility(isTrue);
         }
         void setPosition(lSize x, lSize y){
-            _posX = x;
-            _posY = y;
+            _prevX = _x;
+            _prevY = _y;
+            _x = x;
+            _y = y;
+            notifyPosition();
         }
-        void setChar(char chr){
-            _chr = chr;
+    private:
+        void notifyVisibility(bool isTrue){
+            if(_screen){
+                _screen->updateVisibility(isTrue);
+            }
         }
-    public: // --------------------- GETTER ---------------------
-        lSize getPositionX(){
-            return _posX;
+        void notifyPosition(){
+            _screen->updatePosition(_chr,_x,_y,_prevX, _prevY);
         }
-        lSize getPositionY(){
-            return _posY;
-        }
-        lSize getPrevPositionX(){
-            return _prevPosX;
-        }
-        lSize getPrevPositionY(){
-            return _prevPosY;
-        }
-        char getChar(){
-            return _chr;
-        }
-    void updatePrevPos(){
-        _prevPosX = _posX;
-        _prevPosY = _posY;
-    }    
-    private: // --------------------- CHECKER --------------------- 
-        void updatePrevPosition(lSize x, lSize y){
-            _prevPosX = x;
-            _prevPosY = y;
-        }
+    private:
+        ConsoleScreen *_screen = nullptr;
+    };
 
-    private: // --------------------- VARIABLES --------------------- 
-        lSize           _posX       = 0,
-                        _posY       = 0,
-                        _prevPosX   = 0,
-                        _prevPosY   = 0;
-        BodyType        _bType      = StaticBody;
-        AreaBodyType    _aType      = Box;
-        char            _chr        = ' ';
-        bool            _visibility = true;
+    class StaticBody : ConsoleEnvironment{
+
     };
 
 };
