@@ -1,13 +1,17 @@
 #ifndef CONSOLESCREEN_H
 #define CONSOLESCREEN_H
 #include "includes.h"
+
+/**
+ * @brief 
+ * @todo Create a ConsoleScreenHandler
+ */
 namespace CE{
     class ConsoleEnvironment;
     class ConsoleScreen{
     private:
         typedef long long lSize;
         friend class ConsoleEnvironment;
-        friend class RigidBody;
     public: // constructors
         ConsoleScreen(const lSize &width, const lSize &height, char chr = ' ') : _screenWidth(width), _screenHeight(height){ // working
             for(int i = 0; i < height; ++i){
@@ -46,7 +50,6 @@ namespace CE{
                 exit(-1);
             }
         }
-
     private: // UPDATE
         void updatePosition(char chr, lSize x, lSize y, lSize px, lSize py){
             checkRange(x,y); // no ned to check for px and py, since we're sure they are always correct
@@ -55,10 +58,15 @@ namespace CE{
                 _screen[py].second[px] = _chr;
             }
         }
-        void updateVisibility(bool isTrue){
-            std::cout << "Successfully notified" << std::endl;
+        void updateVisibility(lSize x, lSize y, char chr = '\0'){
+            if(chr == '\0'){
+                _screen[y].second[x] = _chr;
+            }else{
+                _screen[y].second[x] = chr;
+
+            }
         }
-    private: // getter
+    public: // getter
         lSize getScreenWidth(){
             return _screenWidth;
         }
