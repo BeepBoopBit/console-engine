@@ -34,9 +34,17 @@ int main(){
         _handle.moveX(1); 
         mainScreen.print();
     }
-
-
-
+    sleepFor(500);
+    _handle.moveY(1); 
+    mainScreen.print();
+    sleepFor(500);
+    _handle.moveY(-1); 
+    mainScreen.print();
+    for(int i = 0; i < 2; ++i){
+        sleepFor(500);
+        _handle.moveX(-1); 
+        mainScreen.print();
+    }
 }
 
 // successfully
