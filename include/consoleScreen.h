@@ -20,7 +20,7 @@ namespace CE{
                 for(int j = 0; j < width; ++j){ // populate the x's
                     _screen[i].first[j] = j;
                 }
-                for(int j = 0; j < width; ++j){ // {"COLOR", "CHAR", "COLOR"}
+                for(int j = 0; j < width; ++j){ // {"COLOR", "CHAR"}
                     _screen[i].second[j].push_back("\033[0m");
                     _screen[i].second[j].push_back(std::string(1,chr));
                 }
@@ -62,14 +62,17 @@ namespace CE{
             }
         }
         void move_to(long x, long y){
-            std::cout << "\033[" << y << ';' << x << 'H';
+            std::cout << "\033[" << y+1 << ';' << x+1 << 'H';
         }
     private: // UPDATE
         void updatePosition(char chr, lSize x, lSize y, lSize px, lSize py){
             checkRange(x,y); // no ned to check for px and py, since we're sure they are always correct
             _screen[y].second[x][_defaultX] = chr;
-            if(py != y || px != x){
-                _screen[py].second[px][_defaultX] = _chr;
+            if(px != x || py != y){
+                std::string tempColor = _screen[py].second[px][0];
+                _screen[py].second[px][0] = "\033[0m"; // reset color
+                _screen[y].second[x][0] = tempColor; // change to new color
+                _screen[py].second[px][_defaultX] = _chr; // reset the character
             }
         }
         void updateVisibility(lSize x, lSize y, char chr = '\0'){
