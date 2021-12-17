@@ -5,6 +5,7 @@
 /**
  * @brief 
  * @todo Create a ConsoleScreenHandler
+ * @todo Implement Position in Screen
  */
 namespace CE{
     class ConsoleEnvironment;
@@ -13,26 +14,29 @@ namespace CE{
         typedef long long lSize;
         friend class ConsoleEnvironment;
     public: // constructors
-        ConsoleScreen(const lSize &width, const lSize &height, char chr = ' ') : _screenWidth(width), _screenHeight(height){ // working
+        ConsoleScreen(const lSize &width, const lSize &height, lSize startX = 0, lSize startY = 0, char chr = ' ') : _screenWidth(width), _screenHeight(height){ // working
             for(int i = 0; i < height; ++i){
-                _screen[i] = std::make_pair(std::vector<long long>(width), std::string(width, chr));
+                _screen[i] = std::make_pair(std::vector<lSize>(width), std::string(width, chr));
                 for(int j = 0; j < width; ++j){
                     _screen[i].first[j] = j;
                 }
             }
             _chr = chr;
+            _x = startX;
+            _y = startY;
         }
         void add(){
             // add screen in a screen (MAYBE)
         }
-        void debugPrint(){
-            system("cls"); // TEST
-            for(auto i: _screen){
-                std::cout << i.second.second << '\n';
+        void print(){
+            system("cls");
+            for(int i = 0; i < _screen.size(); ++i){
+                move_to(_x,_y+i);
+                std::cout << _screen[i].second;
             }
         }
     private: // functions
-        void checkRange(int x, int y = 0){
+        void checkRange(lSize x, lSize y = 0){
             if(x >= _screenWidth){
                 callError("range");
             }else if(x < 0){
@@ -49,6 +53,9 @@ namespace CE{
                 std::cout << "Out of Bounce" << std::endl;
                 exit(-1);
             }
+        }
+        void move_to(long x, long y){
+            std::cout << "\033[" << y << ';' << x << 'H';
         }
     private: // UPDATE
         void updatePosition(char chr, lSize x, lSize y, lSize px, lSize py){
@@ -76,14 +83,16 @@ namespace CE{
         lSize getScreenTotal(){
             return _screenWidth*_screenHeight;
         }
-        std::map<long long, std::pair<std::vector<long long>, std::string>> *getScreen(){
+        std::map<lSize, std::pair<std::vector<lSize>, std::string>> *getScreen(){
             return &_screen;
         }
     private: // variables
-        std::map<long long, std::pair<std::vector<long long>, std::string>> _screen;
+        std::map<lSize, std::pair<std::vector<lSize>, std::string>> _screen;
         const lSize _screenWidth;
         const lSize _screenHeight;
         char _chr;
+        lSize _x;
+        lSize _y;
     protected:
     };
     
