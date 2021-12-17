@@ -27,14 +27,14 @@ namespace CE{
             }
         }
         void moveX(lSize x){
-            for(int i = 0; i < _environments.size(); ++i){
+            for(int i = _environments.size()-1; i >= 0; --i){
                 lSize newX = _environments[i]->getPosX()+x;
                 lSize y = _environments[i]->getPosY();
                 _environments[i]->setPosition(newX,y);
             }
         }
         void moveY(lSize y){
-            for(int i = 0; i < _environments.size(); ++i){
+            for(int i = _environments.size()-1; i >= 0; --i){
                 lSize x = _environments[i]->getPosX();
                 lSize newY = _environments[i]->getPosY()+y;
                 _environments[i]->setPosition(x,newY);

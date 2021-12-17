@@ -38,6 +38,10 @@ namespace CE{
             _color = "\033[38;2;" + std::to_string(r) + ';' + std::to_string(g) + ';' + std::to_string(b) + 'm';
             notifyColor();
         }
+        void resetColor(){
+            _color = "\033[0m";
+            notifyColor();
+        }
     public: // getter
         lSize getPosX(){
             return _x;
@@ -74,6 +78,13 @@ namespace CE{
         void notifyColor(){
             _screen->updateColor(_x, _y, _color);
         }
+        void setPositionStart(lSize x, lSize y){
+            _prevX = x;
+            _prevY = y;
+            _x = x;
+            _y = y;
+            notifyPosition();
+        }
     private:
         bool _visibility = true;
         long long _x = 0,
@@ -82,7 +93,7 @@ namespace CE{
                   _prevY = 0;
         char _chr = ' ';
         ConsoleScreen *_screen = nullptr;
-        std::string _color = "\033[38;2;10;20;30m";
+        std::string _color = "\033[0m";
     };
     class RigidBody : public ConsoleEnvironment{ // to be implemented
     private:
@@ -91,7 +102,7 @@ namespace CE{
         RigidBody(ConsoleScreen *screen = nullptr, char chr = ' ', lSize posX = 0, lSize posY = 0, bool visibility = true, AreaBodyType bType = Box){
             setScreen(screen);
             setChar(chr);
-            setPosition(posX, posY);
+            setPositionStart(posX, posY);
             setVisibility(visibility);
         }
     private:
@@ -104,7 +115,7 @@ namespace CE{
         StaticBody(ConsoleScreen *screen = nullptr, char chr = '#', lSize posX = 0, lSize posY = 0, bool visibility = true, AreaBodyType bType = Box){
             setScreen(screen);
             setChar(chr);
-            setPosition(posX, posY);
+            setPositionStart(posX, posY);
             setVisibility(visibility);
         }
     private:

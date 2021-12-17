@@ -12,7 +12,7 @@ CE::RigidBody *createNewTrees(int x, int y, char chr,  CE::ConsoleScreen *screen
 }
 
 int main(){
-    CE::ConsoleScreen mainScreen(10,10,5,5,'#');
+    CE::ConsoleScreen mainScreen(10,10,0,0,'#');
     CE::ConsoleEnvironmentHandler _handle;
     for(int i = 0; i < 6; ++i){ // top
         _handle.add(createNewTrees(i+2,1,'P',&mainScreen));
@@ -26,10 +26,15 @@ int main(){
     for(int i = 0; i < 6; ++i){ // bottom
         _handle.add(createNewTrees(i+2,8,'P',&mainScreen));
     }
-
     _handle.setColor(100,50,120);
-    _handle.moveX(1);
+    // BUG if environments are cascading
     mainScreen.print();
+    for(int i = 0; i < 2; ++i){
+        sleepFor(500);
+        _handle.moveX(1); 
+        mainScreen.print();
+    }
+
 
 
 }
