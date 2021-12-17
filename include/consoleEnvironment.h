@@ -13,7 +13,7 @@ namespace CE{
         void setVisibility(bool isTrue){
             bool visible = isVisible();
             if(visible != isTrue){
-                notifyVisibility(_x, _y, isTrue);
+                notifyVisibility(isTrue);
                 _visibility = isTrue;
             }
         }
@@ -29,6 +29,14 @@ namespace CE{
         }
         void setScreen(ConsoleScreen *screen){
             _screen = screen;
+        }
+        void setColor(int r, int g, int b){
+            if(((r > 255) || (r < 0)) && ((g > 255) || (g < 0)) && ((b > 255) || (b < 0))){
+                std::cout << "Wrong Color" << std::endl;
+                exit(-1);
+            }
+            _color = "\033[38;2;" + std::to_string(r) + ';' + std::to_string(g) + ';' + std::to_string(b) + 'm';
+            notifyColor();
         }
     public: // getter
         lSize getPosX(){
@@ -51,17 +59,20 @@ namespace CE{
             return _visibility;
         }
     protected: // Others
-        void notifyVisibility(lSize x, lSize y, bool isTrue){
+        void notifyVisibility(bool isTrue){
             if(_screen){
                 if(isTrue){
-                    _screen->updateVisibility(x,y, _chr);
+                    _screen->updateVisibility(_x,_y,_chr);
                 }else{
-                    _screen->updateVisibility(x,y);
+                    _screen->updateVisibility(_x,_y);
                 }
             }
         }
         void notifyPosition(){
             _screen->updatePosition(_chr,_x,_y,_prevX, _prevY);
+        }
+        void notifyColor(){
+            _screen->updateColor(_x, _y, _color);
         }
     private:
         bool _visibility = true;
@@ -69,14 +80,15 @@ namespace CE{
                   _y = 0;
         long long _prevX = 0,
                   _prevY = 0;
-        char _chr = '#';
+        char _chr = ' ';
         ConsoleScreen *_screen = nullptr;
+        std::string _color = "\033[38;2;10;20;30m";
     };
     class RigidBody : public ConsoleEnvironment{ // to be implemented
     private:
         typedef long long lSize;
     public:
-        RigidBody(ConsoleScreen *screen = nullptr, char chr = '#', lSize posX = 0, lSize posY = 0, bool visibility = true, AreaBodyType bType = Box){
+        RigidBody(ConsoleScreen *screen = nullptr, char chr = ' ', lSize posX = 0, lSize posY = 0, bool visibility = true, AreaBodyType bType = Box){
             setScreen(screen);
             setChar(chr);
             setPosition(posX, posY);

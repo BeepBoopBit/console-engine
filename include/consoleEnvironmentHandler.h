@@ -50,6 +50,11 @@ namespace CE{
                 _environments[i]->setScreen(screen);
             }
         }
+        void setColor(int r, int g, int b){
+            for(int i = 0; i < _environments.size(); ++i){
+                _environments[i]->setColor(r,g,b);
+            }
+        }
     private:
         std::vector<ConsoleEnvironment*> _environments;
     };
