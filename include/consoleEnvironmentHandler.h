@@ -8,6 +8,9 @@ namespace CE{
     private:
         typedef long long lSize;
     public:
+        ConsoleEnvironmentHandler(){
+
+        }
         void add(ConsoleEnvironment *_env){
             _environments.push_back(_env);
         }
@@ -71,7 +74,30 @@ namespace CE{
                 _environments[i]->setColor(r,g,b);
             }
         }
+        void read(std::string path){
+            std::ifstream iOpen(path);
+            if(iOpen.is_open()){
+                std::string indivLine;
+                int y = 0;
+                while(std::getline(iOpen, indivLine)){
+                    for(int i = 0; i < indivLine.length(); ++i){
+                        _environments.push_back(createNewEnvironment(indivLine[i], i, y));
+                    }
+                    ++y;
+                }
+            }else{
+                std::cout << "FILE IS MISSING" << std::endl;
+                exit(-1);
+            }
+        }
+        std::vector<ConsoleEnvironment*> getEnvironment(){
+            return _environments;
+        }
     private:
+        ConsoleEnvironment* createNewEnvironment(char chr, lSize posX, lSize posY){
+            ConsoleEnvironment *temp = new ConsoleEnvironment(chr, posX, posY);
+            return temp;
+        }
         std::vector<ConsoleEnvironment*> _environments;
     };
 }

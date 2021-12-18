@@ -2,6 +2,12 @@
 #define CONSOLEENVIRONMENT_H
 
 #include "consoleScreen.h"
+
+/**
+ * @brief 
+ * @todo Operator overloading for ConsoleEnvironemnt to RigidBody and ConsoleEnvironment to StaticBody
+ * 
+ */
 namespace CE{
 
     class ConsoleEnvironment{
@@ -9,6 +15,29 @@ namespace CE{
         typedef long long lSize;
     public:
         enum AreaBodyType {Box, Circle};
+        ConsoleEnvironment(){
+            _screen = nullptr;
+            _chr = ' ';
+            _x = 0;
+            _y = 0;
+            _prevX = 0;
+            _prevY = 0;
+            _visibility = 0;
+        }
+        ConsoleEnvironment(char chr, lSize posX, lSize posY, bool visibility = true, AreaBodyType bType = Box){
+            _chr = chr;
+            _x = posX;
+            _y = posY;
+            _prevX = posX;
+            _prevY = posY;
+            _visibility = visibility;
+        }
+        ConsoleEnvironment(ConsoleScreen *screen, char chr = ' ', lSize posX = 0, lSize posY = 0, bool visibility = true, AreaBodyType bType = Box){
+            setScreen(screen);
+            setChar(chr);
+            setPositionStart(posX, posY);
+            setVisibility(visibility);
+        }
     public: // setter
         void setVisibility(bool isTrue){
             bool visible = isVisible();
@@ -24,11 +53,14 @@ namespace CE{
             _y = y;
             notifyPosition();
         }
-        void setChar(char chr){
+        inline void setChar(char chr){
             _chr = chr;
         }
-        void setScreen(ConsoleScreen *screen){
+        inline void setScreen(ConsoleScreen *screen){
             _screen = screen;
+            notifyColor();
+            notifyPosition();
+            notifyVisibility(_visibility);
         }
         void setColor(int r, int g, int b){
             if(((r > 255) || (r < 0)) && ((g > 255) || (g < 0)) && ((b > 255) || (b < 0))){
