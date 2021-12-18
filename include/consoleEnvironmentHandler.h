@@ -74,7 +74,7 @@ namespace CE{
                 _environments[i]->setColor(r,g,b);
             }
         }
-        void read(std::string path){
+        void read(std::string path){ // no out of bounce checking
             std::ifstream iOpen(path);
             if(iOpen.is_open()){
                 std::string indivLine;
@@ -90,12 +90,32 @@ namespace CE{
                 exit(-1);
             }
         }
+        void read(std::string path, ConsoleScreen *screen){
+            std::ifstream iOpen(path);
+            if(iOpen.is_open()){
+                std::string indivLine;
+                int y = 0;
+                while(std::getline(iOpen, indivLine)){
+                    for(int i = 0; i < indivLine.length(); ++i){
+                        _environments.push_back(createNewEnvironment(screen,indivLine[i], i, y));
+                    }
+                    ++y;
+                }
+            }else{
+                std::cout << "FILE IS MISSING" << std::endl;
+                exit(-1);
+            }
+        }
         std::vector<ConsoleEnvironment*> getEnvironment(){
             return _environments;
         }
     private:
         ConsoleEnvironment* createNewEnvironment(char chr, lSize posX, lSize posY){
             ConsoleEnvironment *temp = new ConsoleEnvironment(chr, posX, posY);
+            return temp;
+        }
+        ConsoleEnvironment* createNewEnvironment(ConsoleScreen *screen, char chr, lSize posX, lSize posY){
+            ConsoleEnvironment *temp = new ConsoleEnvironment(screen, chr, posX, posY);
             return temp;
         }
         std::vector<ConsoleEnvironment*> _environments;

@@ -24,7 +24,7 @@ namespace CE{
             _prevY = 0;
             _visibility = 0;
         }
-        ConsoleEnvironment(char chr, lSize posX, lSize posY, bool visibility = true, AreaBodyType bType = Box){
+        ConsoleEnvironment(char chr, lSize posX = 0, lSize posY = 0, bool visibility = true, AreaBodyType bType = Box){
             _chr = chr;
             _x = posX;
             _y = posY;
@@ -58,8 +58,8 @@ namespace CE{
         }
         inline void setScreen(ConsoleScreen *screen){
             _screen = screen;
-            notifyColor();
             notifyPosition();
+            notifyColor();
             notifyVisibility(_visibility);
         }
         void setColor(int r, int g, int b){
@@ -94,7 +94,7 @@ namespace CE{
         bool isVisible(){
             return _visibility;
         }
-    protected: // Others
+    protected: // Notification
         void notifyVisibility(bool isTrue){
             if(_screen){
                 if(isTrue){
@@ -110,6 +110,7 @@ namespace CE{
         void notifyColor(){
             _screen->updateColor(_x, _y, _color);
         }
+    protected: // Setter
         void setPositionStart(lSize x, lSize y){
             _prevX = x;
             _prevY = y;

@@ -15,7 +15,11 @@ namespace CE{
         friend class ConsoleEnvironment;
     public: // constructors
         ConsoleScreen(){
-
+            _screenWidth = 0;
+            _screenHeight = 0;
+            _chr = ' ';
+            _x = 0;
+            _y = 0;
         }
         ConsoleScreen(const lSize &width, const lSize &height, lSize startX = 0, lSize startY = 0, char chr = ' ') : _screenWidth(width), _screenHeight(height){ // working
             for(int i = 0; i < height; ++i){
