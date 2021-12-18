@@ -14,6 +14,9 @@ namespace CE{
         typedef long long lSize;
         friend class ConsoleEnvironment;
     public: // constructors
+        ConsoleScreen(){
+
+        }
         ConsoleScreen(const lSize &width, const lSize &height, lSize startX = 0, lSize startY = 0, char chr = ' ') : _screenWidth(width), _screenHeight(height){ // working
             for(int i = 0; i < height; ++i){
                 _screen[i] = std::make_pair(std::vector<lSize>(width), std::vector<std::vector<std::string>>(width));
@@ -34,10 +37,10 @@ namespace CE{
         }
         void print(){
             system("cls");
-            for(int i = 0; i < _screen.size(); ++i){ // SO BAD HAHAHAHA
+            for(int i = 0; i < _screenHeight; ++i){
                 move_to(_x,_y+i);
-                for(auto j: _screen[i].second){
-                    std::cout << j[0] << j[1] << "\033[0m";
+                for(int j = 0; j < _screenWidth; ++j){
+                    std::cout << _screen[i].second[j][0] << _screen[i].second[j][1] << "\033[0m";
                 }
                 std::cout << '\n';
             }
@@ -101,8 +104,8 @@ namespace CE{
         }
     private: // variables
         std::map<lSize, std::pair<std::vector<lSize>, std::vector<std::vector<std::string>>>> _screen;
-        const lSize _screenWidth;
-        const lSize _screenHeight;
+        lSize _screenWidth;
+        lSize _screenHeight;
         char _chr;
         lSize _x; 
         lSize _y;

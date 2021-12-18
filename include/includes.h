@@ -16,5 +16,6 @@
 #include <utility>
 #include <chrono>
 #include <thread>
+#include <algorithm>
 
 #endif // INCLUDES_H
