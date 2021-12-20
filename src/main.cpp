@@ -12,8 +12,8 @@ CE::RigidBody *createNewTrees(int x, int y, char chr,  CE::ConsoleScreen *screen
 }
 
 int main(){
-    CE::ConsoleScreen mainScreen(5,5,0,0,'1');
-    CE::ConsoleEnvironmentHandler _handlers;
-    _handlers.read("E:/Programming/console-engine/src/map00.txt");
+    CE::ConsoleScreen mainScreen(5,4);
+    CE::ConsoleEnvironmentHandler _env;
+    _env.read("E:/Programming/console-engine/src/map00.txt",&mainScreen);
     mainScreen.print();
 }

@@ -94,12 +94,14 @@ namespace CE{
             std::ifstream iOpen(path);
             if(iOpen.is_open()){
                 std::string indivLine;
-                int y = 0;
+                int x = 0, y = 0;
                 while(std::getline(iOpen, indivLine)){
                     for(int i = 0; i < indivLine.length(); ++i){
-                        _environments.push_back(createNewEnvironment(screen,indivLine[i], i, y));
+                        _environments.push_back(createNewEnvironment(screen,indivLine[i], x, y));
+                        ++x;
                     }
                     ++y;
+                    x = 0;
                 }
             }else{
                 std::cout << "FILE IS MISSING" << std::endl;
