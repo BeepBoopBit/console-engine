@@ -18,4 +18,7 @@
 #include <thread>
 #include <algorithm>
 
+#include <thread>
+#include <future>
+
 #endif // INCLUDES_H

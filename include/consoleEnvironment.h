@@ -9,7 +9,6 @@
  * 
  */
 namespace CE{
-
     class ConsoleEnvironment{
     private:
         typedef long long lSize;
