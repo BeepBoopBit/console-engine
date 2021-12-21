@@ -74,7 +74,7 @@ namespace CE{
                 _environments[i]->setColor(r,g,b);
             }
         }
-        void read(std::string path){ // no out of bounce checking
+        void read(std::string path){
             std::ifstream iOpen(path);
             if(iOpen.is_open()){
                 std::string indivLine;

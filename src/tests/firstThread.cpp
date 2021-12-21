@@ -1,6 +1,6 @@
-#include "../include/consoleScreen.h"
-#include "../include/consoleEnvironment.h"
-#include "../include/consoleEnvironmentHandler.h"
+#include "../../include/consoleScreen.h"
+#include "../../include/consoleEnvironment.h"
+#include "../../include/consoleEnvironmentHandler.h"
 
 void sleepFor(int x){
     std::chrono::milliseconds timespan(x); 
