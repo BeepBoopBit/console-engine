@@ -14,6 +14,16 @@ namespace CE{
         void add(ConsoleEnvironment *_env){
             _environments.push_back(_env);
         }
+        void addFront(ConsoleEnvironment *_env){
+            _environments.insert(_environments.begin(), _env);
+        }
+        void remove(ConsoleEnvironment *env){
+            for(int i = 0; i < _environments.size(); ++i){
+                if(_environments[i] == env){
+                    _environments.erase(_environments.begin() +i);
+                }
+            }
+        }
         bool checkForDuplicateEnvironment(){
             for(int i = 0; i < _environments.size(); ++i){
                 for(int j = 0; j < _environments.size(); ++j){
