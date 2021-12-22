@@ -52,6 +52,13 @@ namespace CE{
             _y = y;
             notifyPosition();
         }
+        void setPositionStart(lSize x, lSize y){
+            _prevX = x;
+            _prevY = y;
+            _x = x;
+            _y = y;
+            notifyPosition();
+        }
         inline void setChar(char chr){
             _chr = chr;
         }
@@ -107,13 +114,6 @@ namespace CE{
             _screen->updateColor(_x, _y, _color);
         }
     protected: // Setter
-        void setPositionStart(lSize x, lSize y){
-            _prevX = x;
-            _prevY = y;
-            _x = x;
-            _y = y;
-            notifyPosition();
-        }
     private:
         bool _visibility = true;
         long long _x = 0,
