@@ -29,7 +29,7 @@ void callMoveX(CE::ConsoleEnvironmentHandler *_head, CE::ConsoleEnvironmentHandl
         }
     }
     _head->moveX(n);
-    sleepFor(700);
+    sleepFor(400);
 }
 void callMoveY(CE::ConsoleEnvironmentHandler *_head, CE::ConsoleEnvironmentHandler *_body, int n){
     for(int i = 0; i < (_body->getEnvironment()).size(); ++i){
@@ -43,7 +43,7 @@ void callMoveY(CE::ConsoleEnvironmentHandler *_head, CE::ConsoleEnvironmentHandl
         }
     }
     _head->moveY(n);
-    sleepFor(700);
+    sleepFor(400);
 }
 
 void getMove(int *direction){
@@ -61,7 +61,7 @@ void getMove(int *direction){
         }else{
             *direction = 0;
         }
-        sleepFor(700);
+        sleepFor(400);
     }
 }
 
@@ -108,6 +108,6 @@ int main(){
             *valueDirection = 1;
         }
         mainScreen.print();
-        sleepFor(700);
+        sleepFor(400);
     }
 }

@@ -43,10 +43,11 @@ namespace CE{
             system("cls");
             for(int i = 0; i < _screenHeight; ++i){
                 move_to(_x,_y+i);
+                std::string temp;
                 for(int j = 0; j < _screenWidth; ++j){
-                    std::cout << _screen[i].second[j][0] << _screen[i].second[j][1] << "\033[0m";
+                    temp += _screen[i].second[j][0] + _screen[i].second[j][1] + "\033[0m";
                 }
-                std::cout << '\n';
+                std::cout << temp << '\n';
             }
         }
     private: // functions
