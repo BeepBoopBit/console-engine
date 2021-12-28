@@ -16,11 +16,11 @@ CE::RigidBody *createNewBody(int x, int y, char chr,  CE::ConsoleScreen *screen)
 
 
 void callMoveX(CE::ConsoleEnvironmentHandler *_head, CE::ConsoleEnvironmentHandler *_body, int n){
+    int headPosX = _head->getPosX(0),
+        headPosY = _head->getPosX(0); 
     for(int i = 0; i < (_body->getEnvironment()).size(); ++i){
-        int bodyPosX = _body->getEnvironment()[i]->getPosX(),
-            headPosX = _head->getEnvironment()[0]->getPosX(),
-         bodyPosY = _body->getEnvironment()[i]->getPosY(),
-            headPosY = _head->getEnvironment()[0]->getPosY(); 
+        int bodyPosX = _body->getPosX(i),
+            bodyPosY = _body->getPosY(i);
         if((bodyPosX == headPosX) && (bodyPosY == headPosY)){
             _head->addFront(_body->getEnvironment()[i]); // add
             _body->getEnvironment()[i]->setPositionStart(headPosX - 1,headPosY); // reposition
@@ -32,14 +32,14 @@ void callMoveX(CE::ConsoleEnvironmentHandler *_head, CE::ConsoleEnvironmentHandl
     sleepFor(400);
 }
 void callMoveY(CE::ConsoleEnvironmentHandler *_head, CE::ConsoleEnvironmentHandler *_body, int n){
+    int headPosX = _head->getPosX(0),
+        headPosY = _head->getPosX(0); 
     for(int i = 0; i < (_body->getEnvironment()).size(); ++i){
-        int bodyPosX = _body->getEnvironment()[i]->getPosX(),
-            headPosX = _head->getEnvironment()[0]->getPosX(),
-            bodyPosY = _body->getEnvironment()[i]->getPosY(),
-            headPosY = _head->getEnvironment()[0]->getPosY(); 
+        int bodyPosX = _body->getPosX(i),
+            bodyPosY = _body->getPosY(i);
         if((bodyPosX == headPosX) && (bodyPosY == headPosY)){
-            _head->addFront(_body->getEnvironment()[i]); // add
-            _body->getEnvironment()[i]->setPositionStart(headPosX,headPosY-1); // reposition
+            _head->addFront(_body->getEnvironment(i)); // add
+            _body->getEnvironment(i)->setPositionStart(headPosX,headPosY-1); // reposition
         }
     }
     _head->moveY(n);

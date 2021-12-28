@@ -121,6 +121,15 @@ namespace CE{
         std::vector<ConsoleEnvironment*> getEnvironment(){
             return _environments;
         }
+        ConsoleEnvironment* getEnvironment(lSize index){
+            return _environments[index];
+        }
+        lSize getPosX(lSize index){
+            return _environments[index]->getPosX();
+        }
+        lSize getPosY(lSize index){
+            return _environments[index]->getPosY();
+        }
     private:
         ConsoleEnvironment* createNewEnvironment(char chr, lSize posX, lSize posY){
             ConsoleEnvironment *temp = new ConsoleEnvironment(chr, posX, posY);
