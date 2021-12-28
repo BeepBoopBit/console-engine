@@ -73,10 +73,6 @@ namespace CE{
             _color = "\033[38;2;" + std::to_string(r) + ';' + std::to_string(g) + ';' + std::to_string(b) + 'm';
             notifyColor();
         }
-        void resetColor(){
-            _color = "\033[0m";
-            notifyColor();
-        }
     public: // getter
         lSize getPosX(){
             return _x;
@@ -92,6 +88,14 @@ namespace CE{
         }
         char getChar(){
             return _chr;
+        }
+    public: //others
+        void resetColor(){
+            _color = "\033[0m";
+            notifyColor();
+        }
+        void attach(){
+            
         }
     protected: // utility
         bool isVisible(){

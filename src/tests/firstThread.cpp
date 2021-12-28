@@ -15,58 +15,7 @@ CE::RigidBody *createNewBody(int x, int y, char chr,  CE::ConsoleScreen *screen)
 }
 
 
-void callMoveX(CE::ConsoleEnvironmentHandler *_head, CE::ConsoleEnvironmentHandler *_body, int n){
-    for(int i = 0; i < (_body->getEnvironment()).size(); ++i){
-        int bodyPosX = _body->getEnvironment()[i]->getPosX(),
-            headPosX = _head->getEnvironment()[0]->getPosX(),
-         bodyPosY = _body->getEnvironment()[i]->getPosY(),
-            headPosY = _head->getEnvironment()[0]->getPosY(); 
-        if((bodyPosX == headPosX) && (bodyPosY == headPosY)){
-            _head->addFront(_body->getEnvironment()[i]); // add
-            _body->getEnvironment()[i]->setPositionStart(headPosX - 1,headPosY); // reposition
-            _body->remove(_body->getEnvironment()[i]);
-            break;
-        }
-    }
-    _head->moveX(n);
-    sleepFor(400);
-}
-void callMoveY(CE::ConsoleEnvironmentHandler *_head, CE::ConsoleEnvironmentHandler *_body, int n){
-    for(int i = 0; i < (_body->getEnvironment()).size(); ++i){
-        int bodyPosX = _body->getEnvironment()[i]->getPosX(),
-            headPosX = _head->getEnvironment()[0]->getPosX(),
-            bodyPosY = _body->getEnvironment()[i]->getPosY(),
-            headPosY = _head->getEnvironment()[0]->getPosY(); 
-        if((bodyPosX == headPosX) && (bodyPosY == headPosY)){
-            _head->addFront(_body->getEnvironment()[i]); // add
-            _body->getEnvironment()[i]->setPositionStart(headPosX,headPosY-1); // reposition
-        }
-    }
-    _head->moveY(n);
-    sleepFor(400);
-}
-
-void getMove(int *direction){
-    while(true){
-        char userInput = ' ';
-        userInput = _getwch();
-        if(userInput == 'a'){
-            *direction = 0;
-        } else if(userInput == 'w'){
-            *direction = 1;
-        } else if(userInput == 'd'){
-            *direction = 2;
-        } else if(userInput == 's'){
-            *direction = 3;
-        }else{
-            *direction = 0;
-        }
-        sleepFor(400);
-    }
-}
-
 void createRandomHeads(CE::ConsoleEnvironmentHandler *_handler, CE::ConsoleScreen *mainScreen, int amount){
-    
     for(int i = 0; i < amount; ++i){
         std::random_device dev;
         std::mt19937 rng(dev());
@@ -76,38 +25,72 @@ void createRandomHeads(CE::ConsoleEnvironmentHandler *_handler, CE::ConsoleScree
     }
 }
 
-int main(){
-    CE::ConsoleScreen mainScreen(20,10,0,0,'#');
-    bool inGame = true;
+char getMove(char *val){
+    while(true){
+        *val = _getwch();
+    }
+}
+void moveUp(CE::RigidBody *_head){
+    _head->moveY(-1);
+}
+void moveLeft(CE::RigidBody *_head){
+    _head->moveX(-1);
+}
+void moveDown(CE::RigidBody *_head){
+    _head->moveY(1);
+}
+void moveRight(CE::RigidBody *_head){
+    _head->moveX(1);
+}
+
+// We need some sort of "ATTACH" Functions
+
+void foodEat(CE::RigidBody *_head, CE::ConsoleEnvironmentHandler *_body,std::map<int, std::pair<int,int>> foodIndexMap){
     
+    while(true){
+        int headX = _head->getPosX(),
+            headY = _head->getPosY();
+        auto search = foodIndexMap.find(headY);
+        // pair -> indexBody, index_X
+        if((search != foodIndexMap.end()) && (search->second.second == headY)){
+            _body->getEnvironment(search->second.first)->setPosition(headX, headY);
+        }
+    }
+    
+}
+
+int main(){
+    CE::ConsoleScreen mainScreen(20,10,0,0,'#');    
     CE::RigidBody _head(&mainScreen,'P',0,0);
-    CE::ConsoleEnvironmentHandler _headHandler;
-    _headHandler.add(&_head);
+    CE::ConsoleEnvironmentHandler _body;
 
     CE::ConsoleEnvironmentHandler _aroundBody;
     //createRandomHeads(&_aroundBody, &mainScreen, 1);
     _aroundBody.add(createNewBody(5,4,'P',&mainScreen));
 
+    // food Index should be sorted?
+    std::map<int, int> foodIndexMap;
+    foodIndexMap[4] = 5;
 
-    int _direction = 2, *valueDirection = new int(1);
-    void (*p)(CE::ConsoleEnvironmentHandler *_handle, CE::ConsoleEnvironmentHandler *_body, int n) = callMoveX;
-    std::thread _thread02(getMove,&_direction);
-    while(inGame){ // 0 - left ; 1 - up; 2 - right ; 3 - down
-        p(&_headHandler, &_aroundBody, *valueDirection);
-        if(_direction == 0){ // left
-            p = callMoveX;
-            *valueDirection = -1;
-        }else if(_direction == 1){ // up
-            p = callMoveY;
-            *valueDirection = -1;
-        }else if(_direction == 2){ // right
-            p = callMoveX;
-            *valueDirection = 1;
-        }else{ // down
-            p = callMoveY;
-            *valueDirection = 1;
+    char *userInput = new char('d');
+
+    std::thread movement(getMove, userInput);
+    movement.detach();
+
+    while(true){
+        if(*userInput == 'w'){
+            moveUp(&_head);
+        }else if(*userInput == 'a'){
+            moveLeft(&_head);
+        }else if(*userInput == 's'){
+            moveDown(&_head);
+        }else if(*userInput == 'd'){
+            moveRight(&_head);
         }
         mainScreen.print();
-        sleepFor(400);
+        sleepFor(200);
     }
+
+
+    
 }
