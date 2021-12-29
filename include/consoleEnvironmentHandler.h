@@ -130,6 +130,9 @@ namespace CE{
         lSize getPosY(lSize index){
             return _environments[index]->getPosY();
         }
+        bool empty(){
+            return _environments.empty();
+        }
     private:
         ConsoleEnvironment* createNewEnvironment(char chr, lSize posX, lSize posY){
             ConsoleEnvironment *temp = new ConsoleEnvironment(chr, posX, posY);
