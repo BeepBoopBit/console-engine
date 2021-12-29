@@ -97,6 +97,13 @@ namespace CE{
         void attach(){
             
         }
+    public: // Move
+        void moveX(int num){
+            setPosition(_x+num, _y);
+        }
+        void moveY(int num){
+            setPosition(_x, _y+num);
+        }
     protected: // utility
         bool isVisible(){
             return _visibility;

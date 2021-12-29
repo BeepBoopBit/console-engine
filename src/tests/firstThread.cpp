@@ -30,20 +30,23 @@ char getMove(char *val){
         *val = _getwch();
     }
 }
-void moveUp(CE::RigidBody *_head){
+void moveUp(CE::RigidBody *_head, CE::ConsoleEnvironmentHandler *_body){
     _head->moveY(-1);
+    if(!(_body->empty())){
+        for(int i = 0; i < _body->getEnvironment().size(); ++i){
+            _body->getEnvironment(i)->moveX(i+1);
+        }
+    }
 }
-void moveLeft(CE::RigidBody *_head){
+void moveLeft(CE::RigidBody *_head, CE::ConsoleEnvironmentHandler *_body){
     _head->moveX(-1);
 }
-void moveDown(CE::RigidBody *_head){
+void moveDown(CE::RigidBody *_head, CE::ConsoleEnvironmentHandler *_body){
     _head->moveY(1);
 }
-void moveRight(CE::RigidBody *_head){
+void moveRight(CE::RigidBody *_head, CE::ConsoleEnvironmentHandler *_body){
     _head->moveX(1);
 }
-
-// We need some sort of "ATTACH" Functions
 
 void foodEat(CE::RigidBody *_head, CE::ConsoleEnvironmentHandler *_body,std::map<int, std::pair<int,int>> foodIndexMap){
     
@@ -53,7 +56,7 @@ void foodEat(CE::RigidBody *_head, CE::ConsoleEnvironmentHandler *_body,std::map
         auto search = foodIndexMap.find(headY);
         // pair -> indexBody, index_X
         if((search != foodIndexMap.end()) && (search->second.second == headY)){
-            _body->getEnvironment(search->second.first)->setPosition(headX, headY);
+            _body->getEnvironment(search->second.first)->setPosition(headX-1, headY);
         }
     }
     
@@ -79,13 +82,13 @@ int main(){
 
     while(true){
         if(*userInput == 'w'){
-            moveUp(&_head);
+            moveUp(&_head, &_body);
         }else if(*userInput == 'a'){
-            moveLeft(&_head);
+            moveLeft(&_head, &_body);
         }else if(*userInput == 's'){
-            moveDown(&_head);
+            moveDown(&_head, &_body);
         }else if(*userInput == 'd'){
-            moveRight(&_head);
+            moveRight(&_head, &_body);
         }
         mainScreen.print();
         sleepFor(200);
