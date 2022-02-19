@@ -1,5 +1,6 @@
 #ifndef CONSOLESCREEN_H
 #define CONSOLESCREEN_H
+
 #include "includes.h"
 
 /**
@@ -8,11 +9,12 @@
  * @todo Implement Color
  */
 namespace CE{
-    class ConsoleEnvironment;
+
+    class Observer;
     class ConsoleScreen{
     public:
         typedef std::string::size_type sType;
-
+        friend Observer;
     public: // constructors
         ConsoleScreen()  : _screenWidth(20), _screenHeight(10), _background(' '){
             setupMap();
@@ -27,7 +29,7 @@ namespace CE{
          * When moving, the previous value will be replaced by the background character
          **/
         
-        void move(int pX, int pY, int nX, int nY){
+        void move(sType pX, sType pY, sType nX, sType nY){
             // save the previous character
             char chrPrev = _screen[pX + (pY*(_screenWidth + (1)))];
             // replace the previous position by the background
@@ -35,16 +37,16 @@ namespace CE{
             // move to the next position
             _screen[nX + (nY*(_screenWidth + (1)))] = chrPrev;
         }
-        void moveUp(int pX, int pY, int num){
+        void moveUp(sType pX, sType pY, sType num){
             move(pX, pY, pX, pY-num);
         }
-        void moveLeft(int pX, int pY, int num){
+        void moveLeft(sType pX, sType pY, sType num){
             move(pX, pY, pX-num, pY);
         }
-        void moveDown(int pX, int pY, int num){
+        void moveDown(sType pX, sType pY, sType num){
             move(pX, pY, pX, pY+num);
         }
-        void moveRight(int pX, int pY, int num){
+        void moveRight(sType pX, sType pY, sType num){
             move(pX, pY, pX+num, pY);
         }
     
@@ -52,17 +54,21 @@ namespace CE{
         void print(){
             std::cout << _screen;
         }
-
-    public: // debug
-        void place(int x, int y, char character){
+    
+    private:
+        void setupMap(){
+            for(sType i = 0; i < _screenHeight; ++i){
+                _screen += std::string(_screenWidth, _background) + '\n';
+            }
+        }
+        
+        void place(sType x, sType y, char character){
             _screen[x+(y*(_screenWidth+1))] = character;
         }
 
-    private:
-        void setupMap(){
-            for(int i = 0; i < _screenHeight; ++i){
-                _screen += std::string(_screenWidth, _background) + '\n';
-            }
+    protected:
+        void initialEntity(sType x, sType y, char character){
+            place(x,y,character);
         }
     private:
         std::string _screen;
