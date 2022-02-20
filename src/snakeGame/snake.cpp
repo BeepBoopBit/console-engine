@@ -14,8 +14,11 @@ void moveRight(CE::ConsoleEntity* entity){
     entity->moveRight(1);
 }
 
-void createBody(){
-
+CE::ConsoleEntity *createBody(int width, int height, CE::Observer* observer){
+    srand(time(0));
+    int x = (rand()%(width-2))+1;
+    int y = (rand()%(height-2))+1;
+    return new CE::ConsoleEntity(observer,'O',x,y);
 }
 
 void changeMovement(int &direction, bool &inGame){
@@ -66,11 +69,20 @@ void moveSnake(int &direction, bool &inGame, std::vector<CE::ConsoleEntity*> &en
         }else if(direction == 4){
             moveRight(entities[0]);
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(400));
         //moveSnakeBody(entities);
+        std::this_thread::sleep_for(std::chrono::milliseconds(400));
     }
 }
 
+void checkForBody(CE::ConsoleEntity *body, CE::ConsoleEntity *head,
+                  std::vector<CE::ConsoleEntity*> &_entities, bool &inGame, int width, int height, CE::Observer* observer){
+    while(inGame){
+        if(head->getCurrentX() == body->getCurrentX() && head->getCurrentY() == body->getCurrentY()){
+            _entities.push_back(body);
+            body = createBody(width,height,observer);
+        }
+    }
+}
 
 int main(){
 
@@ -82,6 +94,7 @@ int main(){
 
     CE::ConsoleScreen *_screen = new CE::ConsoleScreen(_screenWidth,_screenHeight,' ');
     CE::Observer *_headObserver = new CE::Observer(_screen);
+    CE::Observer *_bodyObserver = new CE::Observer(_screen);
     CE::Observer *_boundaryObserver = new CE::Observer(_screen);
 
     CE::ConsoleEntityHandler _boundariesHandler;
@@ -103,6 +116,7 @@ int main(){
     }
 
     CE::ConsoleEntity *_head = new CE::ConsoleEntity(_headObserver, 'P',2,1);
+    CE::ConsoleEntity *_tempBody = createBody(_screenWidth, _screenHeight, _bodyObserver);
     std::vector<CE::ConsoleEntity*> _entities = {_head};
 
     // threads
@@ -111,6 +125,8 @@ int main(){
         changeMovementThread.detach();
         std::thread moveSnakeThread(moveSnake, std::ref(_direction), std::ref(inGame), std::ref(_entities));
         moveSnakeThread.detach();
+        std::thread bodyCheckThread(checkForBody,_tempBody, _head, std::ref(_entities), std::ref(inGame), _screenWidth, _screenHeight, _bodyObserver);
+        bodyCheckThread.detach();
     }
 
     while(inGame){

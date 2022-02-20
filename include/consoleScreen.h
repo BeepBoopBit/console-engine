@@ -20,7 +20,7 @@ namespace CE{
             setupMap();
         }
         
-        ConsoleScreen(sType width, sType height, char background = ' ') : _screenWidth(width), _screenHeight(height), _background(background){
+        ConsoleScreen(sType width, sType height, char background = ' ') : _screenWidth(width), _screenHeight(height), _background(background), _storedBackground(background){
             setupMap();
         }
     
@@ -30,10 +30,16 @@ namespace CE{
          **/
         
         void move(sType pX, sType pY, sType nX, sType nY){
+
             // save the previous character
             char chrPrev = _screen[pX + (pY*(_screenWidth + (1)))];
-            // replace the previous position by the background
-            _screen[pX + (pY*(_screenWidth + (1)))] = _background;
+            
+            // replace the previous position by the previous character in that position
+            _screen[pX + (pY*(_screenWidth + (1)))] = _storedBackground;
+            
+            // save the character to his next destination
+            _storedBackground = _screen[nX + (nY*(_screenWidth + (1)))];
+
             // move to the next position
             _screen[nX + (nY*(_screenWidth + (1)))] = chrPrev;
         }
@@ -74,7 +80,9 @@ namespace CE{
         std::string _screen;
         sType _screenWidth,
               _screenHeight;
-        char _background;
+        char _background,
+             _storedBackground;
+        bool isFirst = true;
     };
     
 };
