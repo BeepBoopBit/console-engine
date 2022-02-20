@@ -2,6 +2,15 @@
 #include "../include/observer.h"
 #include "../include/consoleEntity.h"
 
+void printCurrent(CE::ConsoleEntity *entity){
+    std::cout << "Current: (";
+    std::cout << entity->getCurrentX() << ", " << entity->getCurrentY() << ")\n";
+}
+
+void printPrevious(CE::ConsoleEntity *entity){
+    std::cout << "Previous: (";
+    std::cout << entity->getPreviousX() << ", " << entity->getPreviousY() << ")\n";
+}
 
 int main(){
     CE::ConsoleScreen *mainScreen = new CE::ConsoleScreen(10,10,'#');
@@ -14,9 +23,28 @@ int main(){
     WholeSnake.attach(SnakeBody00);
     WholeSnake.attach(SnakeBody01);
     mainScreen->print();
-    WholeSnake.moveDown(2);
+
     std::cout << std::endl;
+    printCurrent(SnakeHead);
+    printCurrent(SnakeBody00);
+    printCurrent(SnakeBody01);
+    printPrevious(SnakeHead);
+    printPrevious(SnakeBody00);
+    printPrevious(SnakeBody01);
+    std::cout << std::endl;
+
+
+    WholeSnake.moveDown(2);
     mainScreen->print();
+
+    std::cout << std::endl;
+    printCurrent(SnakeHead);
+    printCurrent(SnakeBody00);
+    printCurrent(SnakeBody01);
+    printPrevious(SnakeHead);
+    printPrevious(SnakeBody00);
+    printPrevious(SnakeBody01);
+    std::cout << std::endl;
 
     
     return 0;
