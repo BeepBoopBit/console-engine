@@ -43,6 +43,20 @@ namespace CE{
             // move to the next position
             _screen[nX + (nY*(_screenWidth + (1)))] = chrPrev;
         }
+        void movePre(sType pX, sType pY, sType nX, sType nY){
+
+            // save the previous character
+            char chrPrev = _screen[pX + (pY*(_screenWidth + (1)))];
+            
+            // replace the previous position by the previous character in that position
+            _screen[pX + (pY*(_screenWidth + (1)))] = _storedBackground;
+            
+            // save the character to his next destination
+            _storedBackground = _screen[nX + (nY*(_screenWidth + (1)))];
+
+            // move to the next position
+            _screen[nX + (nY*(_screenWidth + (1)))] = _storedBackground;
+        }
         void moveUp(sType pX, sType pY, sType num){
             move(pX, pY, pX, pY-num);
         }

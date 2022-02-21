@@ -16,6 +16,9 @@ namespace CE{
         void notifyPosition(sType pX, sType pY, sType nX, sType nY){
             _screen->move(pX,pY, nX, nY);
         }
+        void notifyPrePosition(sType pX, sType pY, sType nX, sType nY){
+            _screen->move(pX,pY, nX, nY);
+        }
         void notifyInitialPosition(sType x, sType y, char character){
             _screen->initialEntity(x,y,character);
         }
