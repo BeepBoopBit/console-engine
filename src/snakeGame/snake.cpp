@@ -69,7 +69,7 @@ void moveSnake(int &direction, bool &inGame, std::vector<CE::ConsoleEntity*> &en
         }else if(direction == 4){
             moveRight(entities[0]);
         }
-        //moveSnakeBody(entities);
+        moveSnakeBody(entities);
         std::this_thread::sleep_for(std::chrono::milliseconds(400));
     }
 }

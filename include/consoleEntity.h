@@ -29,6 +29,13 @@ namespace CE{
             _cY = nY;
             _observer->notifyPosition(pX, pY, nX, nY);
         }
+        void movePre(int pX, int pY, int nX, int nY){
+            _pX = pX;
+            _pY = pY;
+            _cX = nX;
+            _cY = nY;
+            _observer->notifyPrePosition(pX, pY, nX, nY);
+        }
         void moveUp(int num){
             move(_cX, _cY, _cX, _cY-num);
         }
